@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Automation Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Mulish:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080b10;
+  --surface:#0e1218;
+  --surface2:#141920;
+  --surface3:#1c2330;
+  --border:#ffffff0f;
+  --border2:#ffffff1a;
+  --text:#eef0f4;
+  --t2:#8e94a0;
+  --t3:#4a5060;
+  --accent:#00d4a8;
+  --accent2:#f0a030;
+  --accent3:#6070f0;
+  --accent4:#e05060;
+  --glow:rgba(0,212,168,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Mulish',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:999;opacity:.4;
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,11,16,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:56px;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);
+  display:flex;align-items:center;gap:8px;
+}
+.nav-logo-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.nav-links{display:flex;gap:28px}
+.nav-links a{
+  font-size:12px;font-weight:500;
+  color:var(--t2);text-decoration:none;
+  letter-spacing:.04em;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{
+  font-size:11px;font-weight:600;
+  color:var(--bg);background:var(--accent);
+  padding:7px 16px;border-radius:6px;
+  text-decoration:none;letter-spacing:.04em;
+  transition:opacity .2s;
+}
+.nav-cta:hover{opacity:.85}
+
+/* ── SECTIONS ── */
+section{padding:80px 48px;max-width:1200px;margin:0 auto}
+.section-full{max-width:100%;padding:80px 48px}
+
+/* ── HERO ── */
+.hero{
+  min-height:88vh;display:flex;flex-direction:column;
+  justify-content:center;padding:100px 48px 80px;
+  position:relative;overflow:hidden;max-width:100%;
+}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 30%,transparent 100%);
+}
+.hero-glow{
+  position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+  width:800px;height:500px;
+  background:radial-gradient(ellipse,rgba(0,212,168,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:1;max-width:900px}
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;
+  color:var(--accent);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--accent)}
+.hero-h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(42px,6vw,80px);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-.03em;
+  margin-bottom:28px;
+}
+.hero-h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{
+  font-size:18px;font-weight:300;
+  color:var(--t2);line-height:1.7;
+  max-width:600px;margin-bottom:48px;
+}
+.hero-sub strong{color:var(--text);font-weight:500}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap}
+.stat{border-left:2px solid var(--border2);padding-left:20px}
+.stat-num{
+  font-family:'Syne',sans-serif;
+  font-size:32px;font-weight:700;
+  color:var(--text);letter-spacing:-.02em;margin-bottom:2px;
+}
+.stat-num span{color:var(--accent);font-size:20px}
+.stat-lbl{font-size:11px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+
+/* ── SECTION HEADERS ── */
+.sec-header{margin-bottom:48px}
+.sec-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:500;
+  color:var(--accent);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
+.sec-h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,3.5vw,44px);
+  font-weight:700;letter-spacing:-.02em;line-height:1.1;
+  margin-bottom:12px;
+}
+.sec-sub{font-size:15px;color:var(--t2);line-height:1.6;max-width:560px}
+
+/* ── CARDS ── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px;
+  transition:border-color .2s,transform .2s;
+  position:relative;overflow:hidden;
+}
+.card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border2),transparent);
+}
+.card-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;flex-shrink:0;
+}
+.card-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.card-text{font-size:13px;color:var(--t2);line-height:1.65}
+
+/* ── MISSION ── */
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.mission-big{
+  grid-column:1/-1;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:40px;
+  position:relative;overflow:hidden;
+}
+.mission-big::after{
+  content:'';position:absolute;
+  right:-60px;top:-60px;
+  width:240px;height:240px;
+  background:radial-gradient(circle,rgba(0,212,168,.06),transparent 70%);
+}
+.mission-quote{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(18px,2.5vw,26px);
+  font-weight:600;line-height:1.4;
+  letter-spacing:-.01em;
+  margin-bottom:16px;
+  max-width:700px;
+}
+.mission-quote em{font-style:normal;color:var(--accent)}
+.mission-note{font-size:13px;color:var(--t2);line-height:1.6;max-width:600px}
+.pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* ── TEAM ── */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.team-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:24px;text-align:center;
+  transition:border-color .2s,transform .2s;
+}
+.team-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.team-av{
+  width:64px;height:64px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:700;
+  margin:0 auto 14px;
+  border:2px solid var(--border2);
+}
+.team-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.team-title{font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.4}
+.team-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:500;
+  padding:3px 10px;border-radius:20px;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ── PROJECTS ── */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.project-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+  transition:border-color .2s,transform .2s;
+}
+.project-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.project-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px}
+.project-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.project-status{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:500;
+  padding:3px 9px;border-radius:20px;
+  white-space:nowrap;flex-shrink:0;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.status-active{background:rgba(0,212,168,.12);color:var(--accent)}
+.status-poc{background:rgba(240,160,48,.12);color:var(--accent2)}
+.status-planned{background:rgba(96,112,240,.12);color:var(--accent3)}
+.project-desc{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:16px}
+.project-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{
+  font-size:10px;font-weight:500;
+  padding:3px 9px;border-radius:4px;
+  background:var(--surface2);color:var(--t2);
+  border:1px solid var(--border);
+}
+.project-owner{display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.owner-av{width:22px;height:22px;border-radius:50%;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.owner-name{font-size:11px;color:var(--t3)}
+
+/* ── WINS ── */
+.wins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.win-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+  position:relative;overflow:hidden;
+}
+.win-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px}
+.win-card.rust::before{background:var(--accent)}
+.win-card.gold::before{background:var(--accent2)}
+.win-card.blue::before{background:var(--accent3)}
+.win-card.red::before{background:var(--accent4)}
+.win-metric{
+  font-family:'Syne',sans-serif;
+  font-size:36px;font-weight:800;
+  letter-spacing:-.03em;margin-bottom:4px;
+}
+.win-card.rust .win-metric{color:var(--accent)}
+.win-card.gold .win-metric{color:var(--accent2)}
+.win-card.blue .win-metric{color:var(--accent3)}
+.win-card.red .win-metric{color:var(--accent4)}
+.win-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px}
+.win-desc{font-size:12px;color:var(--t2);line-height:1.6}
+
+/* ── TOOLS ── */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.tool-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:16px;
+  display:flex;align-items:center;gap:12px;
+  transition:border-color .2s;
+}
+.tool-card:hover{border-color:var(--border2)}
+.tool-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:16px;
+}
+.tool-name{font-size:12px;font-weight:600;margin-bottom:2px}
+.tool-type{font-size:10px;color:var(--t3)}
+
+/* ── ONBOARDING ── */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:24px;padding:28px 0;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:none}
+.step-num{
+  font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;
+  color:var(--accent);letter-spacing:.1em;
+  width:32px;flex-shrink:0;padding-top:2px;
+  font-family:'JetBrains Mono',monospace;
+}
+.step-body{flex:1}
+.step-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.step-text{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:10px}
+.step-links{display:flex;flex-wrap:wrap;gap:8px}
+.step-link{
+  font-size:11px;font-weight:500;
+  padding:5px 12px;border-radius:6px;
+  background:var(--surface2);color:var(--t2);
+  border:1px solid var(--border);
+  text-decoration:none;
+  transition:all .15s;cursor:pointer;
+}
+.step-link:hover{border-color:var(--border2);color:var(--text)}
+
+/* ── DOCS ── */
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.doc-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:18px 20px;
+  display:flex;align-items:flex-start;gap:14px;
+  transition:border-color .2s,transform .2s;cursor:pointer;
+  text-decoration:none;
+}
+.doc-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.doc-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.doc-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.doc-sub{font-size:11px;color:var(--t3);line-height:1.4}
+
+/* ── REQUEST HELP ── */
+.help-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.help-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:28px;
+  transition:border-color .2s;
+}
+.help-card:hover{border-color:var(--border2)}
+.help-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+}
+.help-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px}
+.help-text{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:20px}
+.help-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:600;
+  padding:9px 18px;border-radius:7px;
+  text-decoration:none;transition:opacity .15s;
+  cursor:pointer;border:none;font-family:'Mulish',sans-serif;
+}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:32px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface);
+}
+.footer-logo{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+.footer-text{font-size:11px;color:var(--t3)}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 48px}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero-content>*{animation:fadeUp .6s ease both}
+.hero-eyebrow{animation-delay:.1s}
+.hero-h1{animation-delay:.2s}
+.hero-sub{animation-delay:.3s}
+.hero-stats{animation-delay:.4s}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><div class="nav-logo-dot"></div>Revenue Automation</div>
+  <div class="nav-links">
+    <a href="#mission">Mission</a>
+    <a href="#team">Team</a>
+    <a href="#projects">Projects</a>
+    <a href="#wins">Wins</a>
+    <a href="#onboarding">Onboarding</a>
+    <a href="#docs">Docs</a>
+    <a href="#tools">Tools</a>
+  </div>
+  <a class="nav-cta" href="#help">Get help ↗</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Revenue Automation Team · TSC</div>
+    <h1 class="hero-h1">
+      We don't replace<br>people. We give them<br><em>better tools.</em>
+    </h1>
+    <p class="hero-sub">
+      We build automations and integrations that eliminate the repetitive, manual work
+      holding your team back — so you can focus on the work <strong>only you can do.</strong>
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">78<span>hrs</span></div><div class="stat-lbl">Saved per year · report automation</div></div>
+      <div class="stat"><div class="stat-num">5<span>+</span></div><div class="stat-lbl">Active automations in production</div></div>
+      <div class="stat"><div class="stat-num">2<span> teams</span></div><div class="stat-lbl">Sales & operations served</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="sec-header">
+    <div class="sec-eyebrow">Our mission</div>
+    <h2 class="sec-h2">Built for people, not instead of them</h2>
+    <p class="sec-sub">We believe the best automation doesn't replace judgment — it removes the work that never needed a human in the first place.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <div class="mission-big">
+      <p class="mission-quote">
+        "Our job is to make sure that when someone on the sales or operations team sits down in the morning, their most repetitive task <em>is already done.</em>"
+      </p>
+      <p class="mission-note">
+        We sit at the intersection of sales, operations, and technology. We don't own the data or the processes — we build the layer that connects them and removes friction. Every automation we ship gives time back to the people who are best positioned to use it.
+      </p>
+    </div>
+    <div class="pillar-grid">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(0,212,168,.1)">
+          <svg width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="card-title">Eliminate manual work</div>
+        <div class="card-text">If a human is doing the same task the same way every week, we ask why — and then we automate it.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(240,160,48,.1)">
+          <svg width="20" height="20" fill="none" stroke="var(--accent2)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="card-title">Return time to people</div>
+        <div class="card-text">We measure success by hours given back — not by lines of code shipped or tools deployed.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(96,112,240,.1)">
+          <svg width="20" height="20" fill="none" stroke="var(--accent3)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="card-title">Work with every team</div>
+        <div class="card-text">We don't build in isolation. Every project starts with a discovery call and ends with the team fully owning what we built.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="sec-header">
+    <div class="sec-eyebrow">The team</div>
+    <h2 class="sec-h2">Who we are</h2>
+    <p class="sec-sub">A small, focused team split across sales/CRM and operations automation.</p>
+  </div>
+  <div class="team-grid">
+
+    <div class="team-card">
+      <div class="team-av" style="background:rgba(0,212,168,.1);color:var(--accent)">BG</div>
+      <div class="team-name">Brandon Green</div>
+      <div class="team-title">Team Manager</div>
+      <span class="team-badge" style="background:rgba(0,212,168,.1);color:var(--accent)">Leadership</span>
+    </div>
+
+    <div class="team-card">
+      <div class="team-av" style="background:rgba(240,160,48,.1);color:var(--accent2)">NB</div>
+      <div class="team-name">Nick Bean</div>
+      <div class="team-title">Manager · Sales & CRM</div>
+      <span class="team-badge" style="background:rgba(240,160,48,.1);color:var(--accent2)">Sales & CRM</span>
+    </div>
+
+    <div class="team-card">
+      <div class="team-av" style="background:rgba(96,112,240,.1);color:var(--accent3)">EM</div>
+      <div class="team-name">Emilio Moya</div>
+      <div class="team-title">Manager · Operations</div>
+      <span class="team-badge" style="background:rgba(96,112,240,.1);color:var(--accent3)">Operations</span>
+    </div>
+
+    <div class="team-card">
+      <div class="team-av" style="background:rgba(240,160,48,.08);color:var(--accent2)">RB</div>
+      <div class="team-name">Rohith Belede</div>
+      <div class="team-title">Developer · Sales & CRM</div>
+      <span class="team-badge" style="background:rgba(240,160,48,.1);color:var(--accent2)">Sales & CRM</span>
+    </div>
+
+    <div class="team-card">
+      <div class="team-av" style="background:rgba(96,112,240,.08);color:var(--accent3)">GS</div>
+      <div class="team-name">Gianmarco Schimizzi</div>
+      <div class="team-title">Developer · Operations</div>
+      <span class="team-badge" style="background:rgba(96,112,240,.1);color:var(--accent3)">Operations</span>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sec-header">
+    <div class="sec-eyebrow">Current projects</div>
+    <h2 class="sec-h2">What we're building</h2>
+    <p class="sec-sub">Live work, active POCs, and what's coming next.</p>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-head">
+        <div class="project-title">Revenue report automation</div>
+        <span class="project-status status-poc">POC</span>
+      </div>
+      <p class="project-desc">Replacing Scott's manual daily reporting process with an automated digest pipeline. Scott configures recipients once, Make.com handles every send — saving ~78 hours per year.</p>
+      <div class="project-tags">
+        <span class="tag">Make.com</span>
+        <span class="tag">Excel</span>
+        <span class="tag">SharePoint</span>
+        <span class="tag">JSON</span>
+      </div>
+      <div class="project-owner">
+        <div class="owner-av" style="background:rgba(96,112,240,.15);color:var(--accent3)">EM</div>
+        <span class="owner-name">Emilio Moya · Gianmarco Schimizzi</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-head">
+        <div class="project-title">Timesheet upload automation</div>
+        <span class="project-status status-active">Active</span>
+      </div>
+      <p class="project-desc">Automating the attachment upload flow for payroll timesheets — eliminating manual file handling and reducing processing errors for the PY team.</p>
+      <div class="project-tags">
+        <span class="tag">Communities</span>
+        <span class="tag">Payroll</span>
+        <span class="tag">PDF</span>
+      </div>
+      <div class="project-owner">
+        <div class="owner-av" style="background:rgba(96,112,240,.15);color:var(--accent3)">GS</div>
+        <span class="owner-name">Gianmarco Schimizzi</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-head">
+        <div class="project-title">CRM data enrichment</div>
+        <span class="project-status status-planned">Planned</span>
+      </div>
+      <p class="project-desc">Improving data quality in the CRM by automating enrichment workflows — reducing manual data entry for the sales team and improving pipeline visibility.</p>
+      <div class="project-tags">
+        <span class="tag">Salesforce</span>
+        <span class="tag">CRM</span>
+        <span class="tag">Sales</span>
+      </div>
+      <div class="project-owner">
+        <div class="owner-av" style="background:rgba(240,160,48,.15);color:var(--accent2)">RB</div>
+        <span class="owner-name">Rohith Belede</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-head">
+        <div class="project-title">Missing hours query tool</div>
+        <span class="project-status status-poc">POC</span>
+      </div>
+      <p class="project-desc">A simple query interface that surfaces workers missing hours between dates — giving operations managers instant visibility without manual spreadsheet hunting.</p>
+      <div class="project-tags">
+        <span class="tag">Beavers DB</span>
+        <span class="tag">Operations</span>
+        <span class="tag">Queries</span>
+      </div>
+      <div class="project-owner">
+        <div class="owner-av" style="background:rgba(96,112,240,.15);color:var(--accent3)">EM</div>
+        <span class="owner-name">Emilio Moya</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WINS -->
+<section id="wins">
+  <div class="sec-header">
+    <div class="sec-eyebrow">Showcase · wins</div>
+    <h2 class="sec-h2">Impact so far</h2>
+    <p class="sec-sub">Real numbers from work we've shipped or are actively building.</p>
+  </div>
+  <div class="wins-grid">
+    <div class="win-card rust">
+      <div class="win-metric">78</div>
+      <div class="win-title">Hours returned per year</div>
+      <div class="win-desc">Estimated time saved from automating Scott's revenue report delivery — the equivalent of nearly 2 full work weeks annually.</div>
+    </div>
+    <div class="win-card gold">
+      <div class="win-metric">17×</div>
+      <div class="win-title">Manual sends eliminated</div>
+      <div class="win-desc">The revenue report is sent 17 times per month. Each send is fully manual today. The POC eliminates every single one.</div>
+    </div>
+    <div class="win-card blue">
+      <div class="win-metric">0</div>
+      <div class="win-title">Backend needed</div>
+      <div class="win-desc">Our report configuration tool runs entirely in the browser — no server, no database, no infrastructure cost to the business.</div>
+    </div>
+    <div class="win-card red">
+      <div class="win-metric">4</div>
+      <div class="win-title">Teams served</div>
+      <div class="win-desc">Leadership, operations, sales, and payroll — all currently in scope across our active and planned projects.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ONBOARDING -->
+<section id="onboarding">
+  <div class="sec-header">
+    <div class="sec-eyebrow">New here?</div>
+    <h2 class="sec-h2">Onboarding guide</h2>
+    <p class="sec-sub">Everything you need to get up to speed with how we work, what we use, and who to talk to.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <div class="step-title">Understand the team structure</div>
+        <div class="step-text">We're split into two tracks — Sales & CRM (Nick + Rohith) and Operations (Emilio + Gianmarco) — with Brandon overseeing both. Most projects touch both tracks so communication across the team is frequent.</div>
+        <div class="step-links">
+          <span class="step-link">Team org chart →</span>
+          <span class="step-link">Slack channels →</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <div class="step-title">Get access to core tools</div>
+        <div class="step-text">You'll need access to Make.com, the Beavers database (read-only), SharePoint, and Communities QA environment. Raise an IT request and cc your manager to get these provisioned on day one.</div>
+        <div class="step-links">
+          <span class="step-link">Access request template →</span>
+          <span class="step-link">VPN setup guide →</span>
+          <span class="step-link">QA environment URL →</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <div class="step-title">Read through active project docs</div>
+        <div class="step-text">Every project has a discovery doc and a technical brief. Start with the Revenue Report Automation POC — it covers the full stack we use and the problem-solving approach the team takes on every engagement.</div>
+        <div class="step-links">
+          <span class="step-link">Revenue automation brief →</span>
+          <span class="step-link">Project index →</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <div class="step-title">Shadow a discovery call</div>
+        <div class="step-text">The best way to understand how we work is to sit in on a discovery session with a stakeholder. Ask your manager to pull you into the next one. Bring questions — there are no dumb ones in discovery.</div>
+        <div class="step-links">
+          <span class="step-link">Discovery call template →</span>
+          <span class="step-link">Example transcript (Scott) →</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-body">
+        <div class="step-title">Ship something small in your first two weeks</div>
+        <div class="step-text">We believe the fastest way to learn our stack is to build on it. Your manager will assign a small task in week one — a query, a Make.com module, or a UI component. Get it done and ask for feedback.</div>
+        <div class="step-links">
+          <span class="step-link">Good first issues →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DOCS -->
+<section id="docs">
+  <div class="sec-header">
+    <div class="sec-eyebrow">Documentation</div>
+    <h2 class="sec-h2">Guides & references</h2>
+    <p class="sec-sub">How-tos, architecture docs, and reference material for every active system we own.</p>
+  </div>
+  <div class="docs-grid">
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(0,212,168,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div><div class="doc-title">Revenue report automation</div><div class="doc-sub">Architecture, Make.com setup, JSON schema</div></div>
+    </a>
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(240,160,48,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent2)" stroke-width="1.8" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <div><div class="doc-title">Beavers DB guide</div><div class="doc-sub">Read-only access, query patterns, key tables</div></div>
+    </a>
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(96,112,240,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent3)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div><div class="doc-title">Communities QA setup</div><div class="doc-sub">How to access, navigate, and test safely</div></div>
+    </a>
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(224,80,96,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent4)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      </div>
+      <div><div class="doc-title">Make.com scenario guide</div><div class="doc-sub">How we structure scenarios, naming conventions</div></div>
+    </a>
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(0,212,168,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div><div class="doc-title">Front-end standards</div><div class="doc-sub">HTML/CSS/JS conventions, file naming, output folder</div></div>
+    </a>
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(240,160,48,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent2)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      </div>
+      <div><div class="doc-title">Discovery call template</div><div class="doc-sub">Questions, structure, and how to document findings</div></div>
+    </a>
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(96,112,240,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent3)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div><div class="doc-title">How to request access</div><div class="doc-sub">Step-by-step for new tool access requests</div></div>
+    </a>
+    <a class="doc-card" href="#">
+      <div class="doc-icon" style="background:rgba(224,80,96,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent4)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div><div class="doc-title">Data handling policy</div><div class="doc-sub">What we can query, store, and share — and what we can't</div></div>
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="sec-header">
+    <div class="sec-eyebrow">Our stack</div>
+    <h2 class="sec-h2">Tools & resources</h2>
+    <p class="sec-sub">The platforms and tools we use day to day.</p>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(0,212,168,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div><div class="tool-name">Make.com</div><div class="tool-type">Automation platform</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(240,160,48,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent2)" stroke-width="1.8" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <div><div class="tool-name">Beavers DB</div><div class="tool-type">Data source · read-only</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(96,112,240,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent3)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      </div>
+      <div><div class="tool-name">SharePoint</div><div class="tool-type">Shared file storage</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(224,80,96,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent4)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div><div class="tool-name">Communities</div><div class="tool-type">Core platform · QA + Prod</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(0,212,168,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div><div class="tool-name">Excel / OneDrive</div><div class="tool-type">Reports & data files</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(240,160,48,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent2)" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div><div class="tool-name">HTML / JS</div><div class="tool-type">Front-end tooling</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(96,112,240,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent3)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </div>
+      <div><div class="tool-name">Confluence</div><div class="tool-type">Documentation & wiki</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:rgba(224,80,96,.1)">
+        <svg width="18" height="18" fill="none" stroke="var(--accent4)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+      </div>
+      <div><div class="tool-name">Claude / AI</div><div class="tool-type">Analysis & prototyping</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GET HELP -->
+<section id="help">
+  <div class="sec-header">
+    <div class="sec-eyebrow">Work with us</div>
+    <h2 class="sec-h2">How to get our help</h2>
+    <p class="sec-sub">Have a repetitive process that's eating your team's time? We want to hear about it.</p>
+  </div>
+  <div class="help-grid">
+    <div class="help-card">
+      <div class="help-icon" style="background:rgba(0,212,168,.1)">
+        <svg width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </div>
+      <div class="help-title">Start a conversation</div>
+      <p class="help-text">Not sure if your problem is something we can help with? Just message us. We do a quick 15-minute discovery call and figure out together whether automation makes sense. No commitment, no jargon.</p>
+      <a class="help-btn" style="background:var(--accent);color:var(--bg)">Message the team ↗</a>
+    </div>
+    <div class="help-card">
+      <div class="help-icon" style="background:rgba(240,160,48,.1)">
+        <svg width="22" height="22" fill="none" stroke="var(--accent2)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      </div>
+      <div class="help-title">Submit a request</div>
+      <p class="help-text">Have a clear ask? Fill out a request form and we'll triage it within 48 hours. Include what the manual process looks like today, how often it happens, and who it affects — that's all we need to get started.</p>
+      <a class="help-btn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border2)">Submit a request ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Revenue Automation Team</div>
+  <div class="footer-text">Last updated March 2026 · TSC Internal</div>
+  <div class="footer-text" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3)">Built by the team, for the team.</div>
+</footer>
+
+</body>
+</html>
